@@ -1,0 +1,68 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}My Ads{% endblock title %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div style="margin: auto; text-align: center; padding: 10px;">
+    <form>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+
+        <label class="btn btn-secondary active" onclick="addFunction()">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked>Create a Listing
+        </label>
+        
+        <label class="btn btn-secondary" onclick="activeFunction()">
+             <input type="radio" name="options" id="option2" autocomplete="off">Active Listings
+        </label>
+        
+        <label class="btn btn-secondary" onclick="inactiveFunction()">
+            <input type="radio" name="options" id="option3" autocomplete="off">Inactive Listings
+        </label>
+
+    </div>
+    </form>
+</div>
+
+<div style="margin-left: 15%; margin-right: 15%;">
+	<div class="card">
+		<h3>Create a Stuff</h3>
+			<form method="post" enctype="multipart/form-data">
+				{% csrf_token%}
+				<div class="form-group">
+					{{form.name.label_tag}}
+					{{form.name}}
+				</div>
+				<div class="form-group">
+					{{form.tags.label_tag}}
+					{{form.tags}}
+				</div>
+				<div class="form-group">
+					{{form.description.label_tag}}
+					{{form.description}}
+				</div>
+				<div class="form-group">
+				<label>Images:</label><br>
+				
+				
+				<input type="file" name="myfile"></div>
+				<button type="submit" class="btn btn-info">Add</button>
+			</form>
+    </div>
+</div>
+
+{% else %}
+<div>
+    <a href="{% url 'login'%}?next={{request.path}}" class="w3-bar-item w3-button w3-red">Login first</a> 
+</div>
+{% endif %}
+
+<script>
+function addFunction() { location.replace("{% url 'stuffsharing-myadsadd' %}") }
+function activeFunction() { location.replace("{% url 'stuffsharing-myadsactive' %}") }
+function inactiveFunction() { location.replace("{% url 'stuffsharing-myadsinactive' %}") }
+</script>
+
+{% endblock content %}

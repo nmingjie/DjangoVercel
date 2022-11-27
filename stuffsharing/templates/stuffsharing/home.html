@@ -1,0 +1,35 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+
+{% load static %}
+<div style="position: absolute; top: 55px; left: 0; height: 70%; width: 100%; padding: 100px; background-image: url({% static 'background.jpg' %}); background-size:100%; background-repeat: no-repeat;">
+    <h1 style="color: white; ">StuffSharing</h1>
+    <p style="color: white; ">This is a stuff sharing application that allows people to borrow or loan stuff that they own (e.g., tools, appliances, furniture or books) either for free or for a fee</p>
+    <form class="card" method="post" style="padding: 0px;">
+        {% csrf_token%}
+
+
+        <div class="card-body row no-gutters align-items-center">
+            <div class="col-auto">
+                <i class="fas fa-search h4 text-body"></i>
+            </div>
+            <div class="col">
+            {{ form.search }}
+            </div>
+            <div class="col-auto">
+                
+                <button class="btn btn-lg btn-success" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    <div>
+    
+</div>
+
+  
+
+    <br><br><br><br><br><br><br><br><br><br><br>
+{% endblock content %}

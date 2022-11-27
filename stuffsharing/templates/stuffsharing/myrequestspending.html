@@ -1,0 +1,66 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}My Requests{% endblock title %}
+
+{% block content %}
+
+{% load static %}
+
+{% if user.is_authenticated %}
+<div style="margin: auto; text-align: center; padding: 10px;">
+    <form>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+
+        <label class="btn btn-secondary active" onclick="pendingFunction()">
+            <input type="radio" name="options" id="option1" autocomplete="off">Pending Requests
+        </label>
+        
+        <label class="btn btn-secondary" onclick="acceptedFunction()">
+             <input type="radio" name="options" id="option2" autocomplete="off">Accepted Requests
+        </label>
+
+    </div>
+    </form>
+</div>
+
+<div style="margin-left: 15%; margin-right: 15%;">
+{%for pair in reqAndForm%}
+    <div class="card">
+        <h3>{{pair.0.original_Proposition.stuff_for_lown.name}}</h3>
+        <h5>{{pair.0.original_Proposition.price}}$</h5>
+        <p>{{pair.0.original_Proposition.stuff_for_lown.description}}</p>
+        <div>
+            {% load static %}
+            <img style="height:150px;" src="{% static pair.0.original_Proposition.stuff_for_lown.image %}">
+        </div>
+        <br>
+		<div>
+			<p>Owner: {{pair.0.original_Proposition.owner.Name}}</p>
+			<p>Pick up location: {{pair.0.original_Proposition.pickupAdress}} <br>Pick up date: {{pair.0.original_Proposition.start_date}}</p>
+			<p>Return location: {{pair.0.original_Proposition.returnAdress}} <br>Return date: {{pair.0.original_Proposition.end_date}}</p>
+		</div>
+		
+        <div>
+			<p>My bid: {{pair.0.price}}$</p>
+			<form method="post">
+				{% csrf_token%}
+				{{pair.1.loan_request_id.as_hidden}}
+				<button type="submit" class="btn btn-warning" name="submitter" value="remove">Remove</button>
+			</form>
+		</div>
+    </div>
+{%endfor%}
+</div>
+
+{% else %}
+<div>
+    <a href="{% url 'login'%}?next={{request.path}}" class="w3-bar-item w3-button w3-red">Login first</a> 
+</div>
+{% endif %}
+
+<script>
+function pendingFunction() { location.replace("{% url 'stuffsharing-myrequestspending' %}") }
+function acceptedFunction() { location.replace("{% url 'stuffsharing-myrequestsaccepted' %}") }
+</script>
+
+{% endblock content %}

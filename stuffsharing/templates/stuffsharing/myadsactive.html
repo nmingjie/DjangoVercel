@@ -1,0 +1,100 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}My  Ads{% endblock title %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<div style="margin: auto; text-align: center; padding: 10px;">
+    <form>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary" onclick="addFunction()">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked>Create a Listing
+            </label>
+            <label class="btn btn-secondary active" onclick="activeFunction()">
+                <input type="radio" name="options" id="option2" autocomplete="off">Active Listings
+            </label>  
+            <label class="btn btn-secondary" onclick="inactiveFunction()">
+                <input type="radio" name="options" id="option3" autocomplete="off">Inactive Listings
+            </label>
+        </div>
+    </form>
+</div>
+
+
+<div style="margin-left: 15%; margin-right: 15%;">
+	{% for triplet in propsAndForms %}
+    <div class="card">
+        <h3>{{triplet.0.stuff_for_lown.name}}</h3>
+        <p>{{triplet.0.stuff_for_lown.description}}</p>
+
+        <div>
+            {% load static %}
+            <img style="height:150px;" src="{% static triplet.0.stuff_for_lown.image  %}">
+           
+        </div>
+		
+		{%if not triplet.0.available%}
+			{%for pair in triplet.2%}
+				{%if pair.0.accepted%}
+				<div class="card">
+					<p>Accepted request: </p>
+					<p>User Id: {{pair.0.borrower.Name}}</p>
+					<p>Contact: {{pair.0.borrower.phone}}</p>
+					<p>Price: {{pair.0.price}}</p>
+				</div>
+				{%endif%}
+			{%endfor%}
+			<br>
+			<div>
+				<p>Price: {{triplet.0.price}} $</p>
+				<p>Pick up location: {{triplet.0.pickupAdress}}<br> Pick up date: {{triplet.0.start_date}}</p>
+				<p>Return location: {{triplet.0.returnAdress}}<br> Return date: {{triplet.0.end_date}}</p>
+			</div>
+		{%else%}
+			{%for pair in triplet.2%}
+			<div class="card">
+				<p>User Id: {{pair.0.borrower.Name}}</p>
+				<p>Contact: {{pair.0.borrower.phone}}</p>
+				<p>Price: {{pair.0.price}}</p>
+				<form method="post">
+				{% csrf_token%}
+				<div>
+					{{pair.1.loan_request_id.as_hidden}}
+					<button type="submit" class="btn btn-success" name="submitter" value="accept">Accept</button>
+				</div>
+				</form>
+			</div>
+			{%endfor%}
+
+		<br>
+        <div>
+            <p>Price: {{triplet.0.price}} $</p>
+            <p>Pick up location: {{triplet.0.pickupAdress}}<br> Pick up date: {{triplet.0.start_date}}</p>
+            <p>Return location: {{triplet.0.returnAdress}}<br> Return date: {{triplet.0.end_date}}</p>
+			<form method="post">
+			{% csrf_token%}
+			{{triplet.1.loan_prop_id.as_hidden}}
+            <button type="submit" class="btn btn-warning" name="submitter" value="remove">Remove</button>
+			</form>
+        </div>
+		{%endif%}
+    </div>
+	{% endfor %}
+</div>
+        
+<script>
+function addFunction() { location.replace("{% url 'stuffsharing-myadsadd' %}") }
+function activeFunction() { location.replace("{% url 'stuffsharing-myadsactive' %}") }
+function inactiveFunction() { location.replace("{% url 'stuffsharing-myadsinactive' %}") }
+</script>
+
+
+{% else %}
+<div>
+    <a href="{% url 'login'%}?next={{request.path}}" class="w3-bar-item w3-button w3-red">Login first</a> 
+</div>
+{% endif %}
+
+
+{% endblock content %}

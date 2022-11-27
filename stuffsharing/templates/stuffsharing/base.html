@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>StuffSharing - {% block title %}{% endblock title %}</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'stuffsharing-home' %}">StuffSharing</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+           <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stuffsharing-search' %}">Search</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stuffsharing-myadsadd' %}">My Ads</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stuffsharing-myrequestspending' %}">My Requests</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.get_username }}</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href= "{% url 'stuffsharing-myaccount' %}">My Account</a>
+                        <!-- <a class="dropdown-item" href="{% url 'stuffsharing-mystats' %}">My Stats</a> -->
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stuffsharing-about' %}">About</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login'%}?next={{request.path}}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stuffsharing-signup' %}">Signup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stuffsharing-about' %}">About</a>
+                </li>
+                {% endif %} 
+            </ul>
+        </div>
+    </nav>
+    
+    {% block content %} {% endblock content %}
+    
+    <footer class="page-footer font-small mdb-color pt-4">
+        <div class="container text-center text-md-left">
+            <div class="row text-center text-md-left mt-3 pb-3">
+                <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">StuffSharing</h6>
+                    <p>Invidual Project in the purpose of the class IT2002 - Database Technology and Management at the National University of Singapore.</p>
+                </div>
+                
+                {% if user.is_authenticated %}
+                <hr class="w-100 clearfix d-md-none">
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">My Ads</h6>
+                    <p><a href="{% url 'stuffsharing-myadsadd' %}">Create a Listing</a></p>
+                    <p><a href="{% url 'stuffsharing-myadsactive' %}">Active Listing</a></p>
+                    <p><a href="{% url 'stuffsharing-myadsinactive' %}">Inactive Listing</a></p>
+                    <p><a href="#!"></a></p>
+                </div>
+                <hr class="w-100 clearfix d-md-none">
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Useful links</h6>
+                    <p><a href="{% url 'stuffsharing-myaccount' %}">Your Account</a></p>
+                    <p><a href="#!">Your Stats</a></p>
+                    <p><a href="{% url 'stuffsharing-about' %}">About</a></p>
+                    <p><a href="#!">Help</a></p>
+                </div>
+                
+                {% else %}
+                <hr class="w-100 clearfix d-md-none">
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Useful links</h6>
+                    <p><a href="{% url 'login'%}?next={{request.path}}">Login</a></p>
+                    <p><a href="{% url 'stuffsharing-signup' %}">Signup</a></p>
+                    <p><a href="{% url 'stuffsharing-about' %}">About</a></p>
+                    <p><a href="#!">Help</a></p>
+                </div>
+    
+                {% endif %} 
+
+                <hr class="w-100 clearfix d-md-none">
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-4 font-weight-bold">Members</h6>
+                    <p>Ming Jie</p>
+                </div>
+            </div>
+            
+            <hr>
+            <div class="row d-flex align-items-center">
+                <div class="col-md-7 col-lg-8">
+                    <p class="text-center text-md-left">© 2021 Copyright:
+                        <a href="{% url 'stuffsharing-home' %}">
+                            <strong>StuffSharing.com</strong>
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

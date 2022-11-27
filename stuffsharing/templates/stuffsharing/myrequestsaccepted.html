@@ -1,0 +1,62 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}My Requests{% endblock title %}
+
+{% block content %}
+
+{% load static %}
+
+{% if user.is_authenticated %}
+<div style="margin: auto; text-align: center; padding: 10px;">
+    <form>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+
+        <label class="btn btn-secondary" onclick="pendingFunction()">
+            <input type="radio" name="options" id="option5" autocomplete="off">Pending Requests
+        </label>
+        
+        <label class="btn btn-secondary active" onclick="acceptedFunction()">
+             <input type="radio" name="options" id="option6" autocomplete="off" checked>Accepted Requests
+        </label>
+
+    </div>
+    </form>
+</div>
+
+
+<div style="margin-left: 15%; margin-right: 15%;">
+{%for req in requests%}
+    <div class="card">
+        <h3>{{req.original_Proposition.stuff_for_lown.name}}</h3>
+        <h5>{{req.original_Proposition.price}}$</h5>
+        <p>{{req.original_Proposition.stuff_for_lown.description}}</p>
+        <div>
+            {% load static %}
+            <img style="height:150px;" src="{% static req.original_Proposition.stuff_for_lown.image %}">
+        </div>
+        <br>
+		<div>
+			<p>Owner: {{req.original_Proposition.owner.Name}}</p>
+			<p>Pick up location: {{req.original_Proposition.pickupAdress}} <br>Pick up date: {{req.original_Proposition.start_date}}</p>
+			<p>Return location: {{req.original_Proposition.returnAdress}} <br>Return date: {{req.original_Proposition.end_date}}</p>
+		</div>
+		
+        <div>
+			<p>My bid: {{req.price}}$</p>
+		</div>
+    </div>
+{%endfor%}
+</div>
+
+{% else %}
+<div>
+    <a href="{% url 'login'%}?next={{request.path}}" class="w3-bar-item w3-button w3-red">Login first</a> 
+</div>
+{% endif %}
+
+<script>
+function pendingFunction() { location.replace("{% url 'stuffsharing-myrequestspending' %}") }
+function acceptedFunction() { location.replace("{% url 'stuffsharing-myrequestsaccepted' %}") }
+</script>
+
+{% endblock content %}

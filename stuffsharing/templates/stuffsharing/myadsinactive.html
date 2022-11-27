@@ -1,0 +1,113 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}My Ads{% endblock title %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<div style="margin: auto; text-align: center; padding: 10px;">
+    <form>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+        <label class="btn btn-secondary" onclick="addFunction()">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked>Create a Listing
+        </label>
+        
+        <label class="btn btn-secondary" onclick="activeFunction()">
+             <input type="radio" name="options" id="option2" autocomplete="off">Active Listings
+        </label>
+        
+        <label class="btn btn-secondary active" onclick="inactiveFunction()">
+            <input type="radio" name="options" id="option3" autocomplete="off">Inactive Listings
+        </label>
+    </div>
+    </form>
+</div>
+
+
+<div style="margin-left: 15%; margin-right: 15%;">
+	{%for pair in formList%}
+    <div class="card">
+		<form method="post">
+		{% csrf_token%}
+			<div>
+				<strong>
+				<h3>{{pair.0.name}}</h3> </strong>
+                <p>{{pair.0.description}}</p>
+			</div>
+			
+			<div>
+				{% load static %}
+            <img style="height:150px;" src="{% static pair.0.image %}">
+           
+			</div>
+			<div><br>
+				{{pair.1.stuff_for_lown.as_hidden}}
+                <div class="form-group" style="width: 50%; float: left;">
+                    {{pair.1.price.label_tag}}
+                    {{pair.1.price}}
+                </div>
+                <div class="form-group" style="width: 50%; float: left;">
+                    {{pair.1.bid.label_tag}}
+                    {{pair.1.bid}}
+                </div><br>
+
+                <div class="form-group" style="width: 75%; float: left;">
+                    <label>Pick up location:</label><br>
+					{{pair.1.pickupAddress.label_tag}}
+                    {{pair.1.pickupAddress}}
+                </div>
+                <div class="form-group" style="width: 24%; float: right;">
+                    {{pair.1.start_date.label_tag}}
+                    {{pair.1.start_date}}
+                </div>
+                <div class="form-group" style="width: 75%; float: left;">
+                    <label>Return location:</label><br>
+                    {{pair.1.returnAddress.label_tag}}
+                    {{pair.1.returnAddress}}
+                </div>
+                <div class="form-group" style="width: 24%; float: right;">
+                    {{pair.1.end_date.label_tag}}
+                    {{pair.1.end_date}}
+                </div><br><br><br><br><br><br><br><br>
+                
+                <div class="form-group" style="width: 80%; float: left;">
+                    {{pair.1.selectType.label_tag}}
+					<!--
+                    <input type="radio" name="selection"> Automatic
+					-->
+					{{pair.1.selectType}}
+					<p style="font-size: 10px; padding-left: 20px;float: left;">Automatic:</p>
+                    <p style="font-size: 10px; padding-left: 40px;float: left;">If bidding is allowed: it will select automatically the best offer on the day before the pick up date.<br>
+                    If bidding is not allowed: it will select automatically the first offer.</p><br><br>
+                    
+                    <!--<input type="radio" name="selection"> Manual-->
+					<p style="font-size: 10px; padding-left: 20px;float: left;">Manual:</p>
+                    <p style="font-size: 10px; padding-left: 40px;float: left;">You need to select an offer under the Active Ads tab.<br> If you haven't chosen anyone on the day before the pick up date, this ad will be removed.</p><br>                
+				</div>
+                <br><br><br><br><br><br><br><br><br><br>
+				<button type="submit" class="btn btn-success" style="float: left;" name='submitter' value='Post'>Post</button>
+			</form>
+			<form method="post">
+				{% csrf_token%}
+				{{pair.1.stuff_for_lown.as_hidden}}
+                <button type="submit" class="btn btn-danger" style="float: left;" name='submitter' value='Delete'>Delete</button>
+            </form>
+			</div>
+        </form>
+    </div>
+    {%endfor%}
+</div>
+
+{% else %}
+<div>
+    <a href="{% url 'login'%}?next={{request.path}}" class="w3-bar-item w3-button w3-red">Login first</a> 
+</div>
+{% endif %}
+
+<script>
+function addFunction() { location.replace("{% url 'stuffsharing-myadsadd' %}") }
+function activeFunction() { location.replace("{% url 'stuffsharing-myadsactive' %}") }
+function inactiveFunction() { location.replace("{% url 'stuffsharing-myadsinactive' %}") }
+</script>
+
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}My Stats{% endblock title %}
+
+{% block content %}
+{% load static %}
+
+{% if user.is_authenticated %}
+
+<div style="margin-left: 15%; margin-right: 15%;">
+    <div class="card">
+        <h3>My Stats</h3><br>
+        <h5>My Ads</h5>
+        <br>
+        <p>Number of stuffs:  <strong>{{inactive_ads}}</strong>  </p>
+        <p>Number of ads:  <strong>{{active_ads}}</strong></p>
+        <p>Most frequent tags used: </p>
+        {% for word in freq_tags %}
+        <li>{{word}}</li>
+        {% endfor %}
+
+        <br>
+        <p>Average duration of your ads: {{average_duration}} </p>
+        
+        <br>
+        <h5>My Requests</h5>
+        <p>Number of requests: <strong>{{number_requests}}</strong></p>
+        <p>Most frequent tags requested: </p>
+        {% for word in freq_tags_req %}
+        <li>{{word}}</li>
+        {% endfor %}
+        <br>
+        <p>Average duration of your requests: {{average_duration_request}} </p>
+        
+    </div>
+</div>
+
+{% else %}
+<div>
+    <a href="{% url 'login'%}?next={{request.path}}" class="w3-bar-item w3-button w3-red">Login fist</a> 
+</div>
+{% endif %} 
+
+
+
+{% endblock content %}

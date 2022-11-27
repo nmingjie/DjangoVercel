@@ -1,0 +1,20 @@
+{% extends 'stuffsharing/base.html' %}
+
+{% block title %}Error{% endblock title %}
+
+{% block content %}
+
+<div style="margin-left: 15%; margin-right: 15%;">
+    <div class="card">
+        <h3>Error</h3>
+   
+                
+                <h4 class="{{ message.tags }}">{{ message }}</h4>
+                
+           
+            
+        <p>Sorry for this inconvenience. Please press the back button to return to the previous page.</p>
+    </div>
+</div>
+
+{% endblock content %}

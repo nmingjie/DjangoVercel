@@ -1,0 +1,24 @@
+body {
+    background: #f1f1f1;
+}
+
+.row {
+    margin: 20px;
+}
+
+.left-column {
+    float: left; 
+}
+
+.right-column {
+    float: right; 
+}
+
+.middle-column {
+    float: middle;
+}
+
+.card {
+    padding: 20px; 
+    margin: 10px;
+}
